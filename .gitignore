@@ -1,0 +1,42 @@
+# Data files (regenerate with ingest.py and features.py)
+data/*.db
+data/*.csv
+data/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model artifacts
+models/*.pkl
+models/*.joblib
+models/*.bin
+
+# Keep results/ tracked (small CSVs showing metrics)
+# But ignore any large intermediate files
+results/*.png
+results/*.html

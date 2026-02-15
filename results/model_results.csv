@@ -1,0 +1,3 @@
+model,split,log_loss,brier,C
+Logistic Regression,test,0.5846635178927303,0.1983479324184861,0.001
+LightGBM,test,0.5393449583367425,0.18193576262951713,

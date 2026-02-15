@@ -1,0 +1,36 @@
+def fetch_and_save_snapshots():
+    """Fetch price history for each market and save to snapshots table."""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    # Get all token IDs from markets table
+    cursor.execute("SELECT clob_token_id, question FROM markets")
+    markets = cursor.fetchall()
+    
+    for token_id, question in markets:
+        print(f"Fetching: {question[:50]}...")
+        
+        # Fetch price history
+        response = requests.get(
+            "https://clob.polymarket.com/prices-history",
+            params={"market": token_id, "interval": "max", "fidelity": 5}
+        )
+        
+        if response.status_code != 200:
+            print(f"  Error: {response.status_code}")
+            continue
+            
+        history = response.json().get('history', [])
+        print(f"  Got {len(history)} price points")
+        
+        # Insert each price point
+        for point in history:
+            cursor.execute('''
+                INSERT OR IGNORE INTO snapshots (clob_token_id, ts, price)
+                VALUES (?, ?, ?)
+            ''', (token_id, point['t'], point['p']))
+        
+        conn.commit()  # Commit after each market
+    
+    conn.close()
+    print("Done fetching snapshots")
